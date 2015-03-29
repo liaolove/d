@@ -1,0 +1,49 @@
+/**
+  * @author LI AO
+  * @date 2015.3.29 18:04
+  **/
+
+#include <stdio.h>
+#include <memory.h>
+
+#define N 1000003
+
+bool in[N];
+
+int gcd(int a,int b){
+    int c;
+    while(c=a%b){
+        a=b;
+        b=c;
+    }
+    return b;
+}
+
+int main(){
+    int n,a,b,c,yescnt,nocnt,na,nb,nc;
+    while(scanf("%d",&n)==1){
+        yescnt=nocnt=0;
+        memset(in,0,sizeof(in));
+        for(int i=1;i<=1000;++i)
+            for(int j=i+1;j<=1000;j+=2){
+                //若(i,j) 恰好互質而且一奇一偶，那麼會得到一組(A,B,C)互質的勾股數。
+                a=(i+j)*(j-i);
+                b=2*i*j;
+                c=i*i+j*j;
+                if(c>n) break;
+                if(a<n && b<n && c<=n && gcd(i,j)==1){
+                    yescnt+=1;
+                    in[a]=in[b]=in[c]=true;
+                    na=a+a;nb=b+b;nc=c+c;
+                    while(na<n && nb<n && nc<=n){
+                        in[na]=in[nb]=in[nc]=true;
+                        na+=a;nb+=b;nc+=c;
+                    }
+                }
+            }
+        for(int i=1;i<=n;++i)
+            if(!in[i]) ++nocnt;
+        printf("%d %d\n",yescnt,nocnt);
+    }
+    return 0;
+}
